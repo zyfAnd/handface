@@ -11,7 +11,7 @@ public class BaseResult<T> extends BaseModel  {
     /**
      * 返回给前端的状态码，返回1代表成功 其他失败
      */
-    public int code = 1;
+    public int code = 0;
     /**
      * 返回给前端的状态信息，success 为成功 其他为失败
      */

@@ -3,6 +3,7 @@ package com.soyeah.service.impl;
 import com.soyeah.model.WeChatLoginInfo;
 import com.soyeah.model.base.BaseResult;
 import com.soyeah.model.dto.LoginRes;
+import com.soyeah.model.entity.User;
 import com.soyeah.service.UserService;
 import com.soyeah.util.WeChatUtil;
 import org.springframework.stereotype.Service;
@@ -28,5 +29,10 @@ public class UserServiceImpl implements UserService{
             e.printStackTrace();
         }
         return baseResult;
+    }
+
+    @Override
+    public void saveUser(User user) {
+
     }
 }

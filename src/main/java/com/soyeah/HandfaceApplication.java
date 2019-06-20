@@ -10,6 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 @SpringBootApplication
+
 //@ComponentScan(basePackages={"com.soyeah.service"})
 public class HandfaceApplication {
 

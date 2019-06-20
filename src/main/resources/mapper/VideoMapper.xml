@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yanfu.dao.CosmeticsDao">
+    <resultMap id="BaseResultMap" type="com.yanfu.model.base.BaseInfo">
+        <result column="title" property="title" />
+        <result column="content" property="content" />
+        <result column="image" property="imageUrl" />
+    </resultMap>
+    <select id="getVideos" resultMap="BaseResultMap" >
+        select
+        title title,
+        content content,
+        image imageUrl
+        from t_cosmetics
+    </select>
+
+</mapper>

@@ -1,25 +1,32 @@
 package com.soyeah.controller;
 
 import com.google.gson.Gson;
+import com.soyeah.mapper.UserMapper;
 import com.soyeah.model.KeyWord;
+import com.soyeah.model.PictureRes;
 import com.soyeah.model.TemplateMsg;
 import com.soyeah.model.base.BaseResult;
+import com.soyeah.model.entity.ImageRes;
+import com.soyeah.model.entity.Offical;
+import com.soyeah.model.entity.User;
 import com.soyeah.service.UserService;
 import com.soyeah.util.OkHttpUtil;
+import com.soyeah.util.SharedImageUtils;
 import com.soyeah.util.StringUtil;
 import com.soyeah.util.WeChatUtil;
+import com.sun.imageio.plugins.common.ImageUtil;
 import org.json.HTTP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -36,7 +43,11 @@ import java.util.Random;
 @RequestMapping(value = "/WeChat")
 public class WeChatController {
     Logger logger = LoggerFactory.getLogger(WeChatController.class);
+    String [] officalName = {"纪晓岚","和珅","包拯","狄仁杰","李元芳","海瑞","武则天"};
+    String [] officalRank = {"一品","一品","一品","一品","带刀侍卫","二品","武皇后"};
 
+    @Autowired
+    UserMapper userMapper;
 
     String resultMsg  = "";
     @Autowired
@@ -47,11 +58,20 @@ public class WeChatController {
     private String accessTokenUrl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx6b78cb1789ad172c&secret=3e6b96cc3b7401036370274598df4cee";
 //    @Value("${wechat.template.url}")
     private String templateUrl = "https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=ACCESS_TOKEN";
-    @RequestMapping(value = "/sendTemplateMsg")
-    public String sendTemplateMsg(HttpServletRequest request){
+    @RequestMapping(value = "/sendTemplateMsg", method = RequestMethod.POST)
+    public String sendTemplateMsg(@RequestBody User user){
 //        Gson
-        String form_id = request.getParameter("form_id");
-        String openId = request.getParameter("openId");
+//        String form_id = request.getParameter("form_id");
+//        String openId = request.getParameter("openId");
+        if(user!=null) {
+            logger.info(user.toString());
+        }else{
+            return null;
+        }
+        String form_id = user.getForm_id();
+        String openId = user.getOpenid();
+
+
         logger.info("form_id:"+form_id);
         logger.info("opendId:"+openId);
         String template_id = "WKZv1pFfBYkQi9VfrvlGHRtN8Me0EH9RusxHCCrU_z8";
@@ -115,6 +135,9 @@ public class WeChatController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        userMapper.saveUser(user);
+
         return null;
     }
     @RequestMapping(value = "/validateToken")
@@ -142,5 +165,38 @@ public class WeChatController {
     public String test(){
         logger.info("entry===");
         return "Hello World";
+    }
+    @RequestMapping(value = "/getShareImage",method = RequestMethod.POST)
+    public BaseResult getShareImage(@RequestBody PictureRes res) throws Exception {
+
+        logger.info("===getShareImage==");
+        logger.info(res.toString());
+
+
+
+        BaseResult result = new BaseResult();
+
+        String imageUrl = "http://ouk8myx67.bkt.clouddn.com/test2.jpg";
+        ImageRes imageRes = new ImageRes();
+        imageRes.setImageUrl(imageUrl);
+        result.setData(imageRes);
+        logger.info("===getShareImage=end=");
+        return  result;
+    }
+    @RequestMapping(value = "/getOfficalData")
+    public BaseResult getOfficalData(){
+        logger.info("entry===getOffical==");
+        BaseResult result = new BaseResult();
+        Offical offical = new Offical();
+
+        Random random = new Random();
+        int index = random.nextInt(7);
+
+        offical.setOfficalName(officalName[index]);
+        offical.setOfficalRank(officalRank[index]);
+
+
+        result.setData(offical);
+        return result;
     }
 }

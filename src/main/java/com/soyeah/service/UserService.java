@@ -1,6 +1,7 @@
 package com.soyeah.service;
 
 import com.soyeah.model.base.BaseResult;
+import com.soyeah.model.entity.User;
 
 /**
  * @Authour Zhang Yanfu
@@ -10,5 +11,6 @@ import com.soyeah.model.base.BaseResult;
  */
 public interface UserService {
     public BaseResult loginByWeChat(String code);
+    public void saveUser(User user);
 
 }
